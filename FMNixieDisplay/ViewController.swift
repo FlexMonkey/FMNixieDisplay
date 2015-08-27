@@ -10,16 +10,35 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
+    var currentValue = 2726055
+    let nixieDigitDisplay = FMNixieDigitDisplay(numberOfDigits: 8)
+    
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        view.addSubview(nixieDigitDisplay)
+        
+        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerHandler", userInfo: nil, repeats: true)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func timerHandler()
+    {
+        currentValue = (currentValue + 1)
+        
+        nixieDigitDisplay.setValue(int: currentValue)
+        
+        // nixieDigitDisplay.setValue(float: Float(drand48()) * 10000)
     }
-
+    
+    override func viewDidLayoutSubviews()
+    {
+        nixieDigitDisplay.frame = CGRect(x: view.frame.width / 2 - nixieDigitDisplay.intrinsicContentSize().width / 2,
+            y: view.frame.height / 2 - nixieDigitDisplay.intrinsicContentSize().height / 2,
+            width: nixieDigitDisplay.intrinsicContentSize().width,
+            height: nixieDigitDisplay.intrinsicContentSize().height)
+    }
 
 }
 
