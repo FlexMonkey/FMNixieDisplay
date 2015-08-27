@@ -10,13 +10,14 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var currentValue = 2726055
+    var currentValue = 87654321987
     let nixieDigitDisplay = FMNixieDigitDisplay(numberOfDigits: 8)
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor.blackColor()
         
         view.addSubview(nixieDigitDisplay)
         
@@ -27,9 +28,22 @@ class ViewController: UIViewController {
     {
         currentValue = (currentValue + 1)
         
-        nixieDigitDisplay.setValue(int: currentValue)
+        // nixieDigitDisplay.setValue(int: currentValue)
         
-        // nixieDigitDisplay.setValue(float: Float(drand48()) * 10000)
+        // nixieDigitDisplay.setValue(float: 123456.18724682746)
+        
+        let date = NSDate()
+        let calendar = NSCalendar.currentCalendar()
+        let components = calendar.components(
+            NSCalendarUnit(rawValue: NSCalendarUnit.Hour.rawValue | NSCalendarUnit.Minute.rawValue | NSCalendarUnit.Second.rawValue),
+            fromDate: date)
+        let hour = components.hour
+        let minute = components.minute
+        let second = components.second
+        
+        print(hour, minute, second)
+        
+        nixieDigitDisplay.setValue(string: "\(hour).\(minute)-\(second)")
     }
     
     override func viewDidLayoutSubviews()

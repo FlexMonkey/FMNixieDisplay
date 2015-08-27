@@ -36,41 +36,103 @@ class FMNixieDigitDisplay: UIView
         }
     }
 
+    func setValue(string value: String)
+    {
+        guard value.characters.count <= numberOfDigits else
+        {
+            showError()
+            return
+        }
+        
+        for (i, char) in value.characters.enumerate()
+        {
+
+            if let intValue = Int(String(char))
+            {
+                nixieDigits[numberOfDigits - i - 1].value = intValue
+            }
+            else if char  == "."
+            {
+                nixieDigits[numberOfDigits - i - 1].displayDecimalPoint()
+            }
+            else if char == "-"
+            {
+                nixieDigits[numberOfDigits - i - 1].displayDash()
+            }
+            else
+            {
+                nixieDigits[numberOfDigits - i - 1].value = nil
+            }   
+        }
+        
+        for i in value.characters.count ..< numberOfDigits
+        {
+            nixieDigits[i].value = nil
+        }
+
+    }
+    
     func setValue(float value: Float)
     {
-        let numChars = Int(ceil(log10(Double(value))))
+        let numberOfChars = Int(ceil(log10(Double(value))))
         
-        for i in 0 ..< numChars
+        guard numberOfChars <= numberOfDigits else
+        {
+            showError()
+            return
+        }
+        
+        for i in 0 ..< numberOfChars
         {
             let digitValue = floor((Double(value) / pow(10.0, Double(i)))) % 10
             
-            nixieDigits[numberOfDigits - numChars + i].value = Int(digitValue)
+            nixieDigits[numberOfDigits - numberOfChars + i].value = Int(digitValue)
         }
         
-        nixieDigits[numberOfDigits - numChars - 1].displayDecimalPoint()
-        
-        for i in (numberOfDigits - numChars - 1).stride(to: 0, by: -1)
+        if numberOfDigits - numberOfChars - 1 >= 0
         {
-            let digitValue = modf(value).1 * pow(10.0, Float(numberOfDigits - numChars - i)) % 10
+            nixieDigits[numberOfDigits - numberOfChars - 1].displayDecimalPoint()
+        }
+        
+        for i in (numberOfDigits - numberOfChars - 1).stride(to: 0, by: -1)
+        {
+            let digitValue = modf(value).1 * pow(10.0, Float(numberOfDigits - numberOfChars - i)) % 10
             
-            nixieDigits[i - 1].value = Int(digitValue)
+            if i - 1 >= 0
+            {
+                nixieDigits[i - 1].value = Int(digitValue)
+            }
         }
     }
     
     func setValue(int value: Int)
     {
-        let numChars = Int(ceil(log10(Double(value))))
+        let numberOfChars = Int(ceil(log10(Double(value))))
         
-        for i in 0 ..< numChars
+        guard numberOfChars <= numberOfDigits else
+        {
+            showError()
+            return
+        }
+        
+        for i in 0 ..< numberOfChars
         {
             let digitValue = floor((Double(value) / pow(10.0, Double(i)))) % 10
             
             nixieDigits[i].value = Int(digitValue)
         }
         
-        for i in numChars ..< numberOfDigits
+        for i in numberOfChars ..< numberOfDigits
         {
             nixieDigits[i].value = nil
+        }
+    }
+    
+    func showError()
+    {
+        for digitWidget in nixieDigits
+        {
+            digitWidget.displayDash()
         }
     }
     
@@ -89,6 +151,7 @@ class FMNixieDigit: UIView
 {
     let offImage = UIImage(named: "off.png")
     let dotImage = UIImage(named: "dot.png")
+    let dashImage = UIImage(named: "dash.png")
     
     let evenDigitView = UIImageView()
     let oddDigitView = UIImageView()
@@ -120,6 +183,11 @@ class FMNixieDigit: UIView
         }
         
         useEven = !useEven
+    }
+    
+    func displayDash()
+    {
+        displayImage(dashImage!)
     }
     
     func displayDecimalPoint()
