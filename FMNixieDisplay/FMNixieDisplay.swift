@@ -65,9 +65,9 @@ class FMNixieDigitDisplay: UIView
             }   
         }
         
-        for i in value.characters.count ..< numberOfDigits
+        for i in 0 ..< numberOfDigits - value.characters.count
         {
-            nixieDigits[i].value = nil
+            nixieDigits[i].value = nil 
         }
 
     }
