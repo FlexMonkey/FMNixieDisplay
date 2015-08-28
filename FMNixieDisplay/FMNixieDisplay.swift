@@ -5,6 +5,15 @@
 //  Created by Simon Gladman on 27/08/2015.
 //  Copyright © 2015 Simon Gladman. All rights reserved.
 //
+//  Example usage:
+//
+//  let nixieDigitDisplay = FMNixieDigitDisplay(numberOfDigits: 8)
+//
+//  nixieDigitDisplay.setValue(int: 1234)
+//  nixieDigitDisplay.setValue(float: 123.456)
+//  nixieDigitDisplay.setValue(string: "12.34-56")
+//
+//  See http://nickpolyarush.deviantart.com/art/Nixie-Tube-Numbers-Resource-468478031 for assets source
 
 import UIKit
 
@@ -20,7 +29,7 @@ class FMNixieDigitDisplay: UIView
     {
         self.numberOfDigits = numberOfDigits
         
-        super.init(frame: CGRect(x: 0, y: 0, width: numberOfDigits * digitWidth, height: digitHeight))
+        super.init(frame: CGRectZero)
         
         backgroundColor = UIColor.darkGrayColor()
         
@@ -67,7 +76,7 @@ class FMNixieDigitDisplay: UIView
         
         for i in 0 ..< numberOfDigits - value.characters.count
         {
-            nixieDigits[i].value = nil 
+            nixieDigits[i].value = nil
         }
 
     }

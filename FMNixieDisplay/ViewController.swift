@@ -8,9 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController
+{
 
-    var currentValue = 87654321987
     let nixieDigitDisplay = FMNixieDigitDisplay(numberOfDigits: 8)
     
     override func viewDidLoad()
@@ -26,12 +26,6 @@ class ViewController: UIViewController {
 
     func timerHandler()
     {
-        currentValue = (currentValue + 1)
-        
-        // nixieDigitDisplay.setValue(int: currentValue)
-        
-        // nixieDigitDisplay.setValue(float: 123456.18724682746)
-        
         let date = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(
